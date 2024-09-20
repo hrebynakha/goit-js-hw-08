@@ -63,13 +63,53 @@ const images = [
     description: "Lighthouse Coast Sea",
   },
 ];
+let idx = 0;
+const galery = document.querySelector(".gallery");
+const galeryItems = images
+  .map(
+    (element, idx) =>
+      `<li class="gallery-item">
+        <a class="gallery-link" href="${element.original}">
+            <img
+            class="gallery-image"
+            src="${element.preview}"
+            data-source="${element.original}"
+            data-id="${idx + 1}"
+            alt="${element.description}"
+            />
+        </a>
+    </li>`
+  )
+  .join("");
+galery.insertAdjacentHTML("beforeend", galeryItems);
 
-document.querySelector("button.image").onclick = () => {
-  basicLightbox
-    .create(
+document.querySelector(".gallery").onclick = (e) => {
+  e.preventDefault();
+  if (e.currentTarget != e.target) {
+    const galeryImage = basicLightbox.create(
       `
-		<img width="1400" height="900" src="https://placehold.it/1400x900">
-	`
-    )
-    .show();
+          <span class="counter">${e.target.dataset.id}/${images.length}</span>
+          <span class="back-btn">Back</span>
+          <span class="close-btn"></span>
+          <span class="next-btn">Next</span>
+          <img class="galery-image" width="1400" height="900" src="${e.target.dataset.source}">
+          <p class="image-description">${e.target.alt}</p>
+          
+        `,
+      {
+        className: "bg-overlay image-container",
+        closable: false,
+      }
+    );
+    galeryImage.show(() => {
+      setTimeout(() => {
+        document.querySelector(".image-description").classList.add("is-open");
+      }, 300);
+    });
+
+    const button = document.querySelector(".close-btn");
+    button.addEventListener("click", function () {
+      galeryImage.close();
+    });
+  }
 };
