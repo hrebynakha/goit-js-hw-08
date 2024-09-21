@@ -135,7 +135,7 @@ function displayImage(imageEl) {
       onClose: () => {
         closeButton.removeEventListener("click", closeGalery);
         nextButton.removeEventListener("click", showNext);
-        nextButton.removeEventListener("click", showPrev);
+        backButton.removeEventListener("click", showPrev);
       },
     }
   );
